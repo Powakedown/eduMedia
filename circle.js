@@ -16,4 +16,8 @@ class Circle{
     context.strokeStyle = '#000000';
     context.stroke();
   }
+
+  distanceBetween(other_circle) {
+    return Math.sqrt(Math.pow((this.x - other_circle.x) , 2) + Math.pow((this.y - other_circle.y) , 2))
+  }
 }

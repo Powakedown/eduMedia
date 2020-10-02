@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" href="style.css">
     <script src="circle.js"></script>
+    <script src="text.js"></script>
   </head>
   <body>
     <canvas id="canvas" width="1024" height="768">
@@ -17,8 +18,9 @@
       const context = canvas.getContext('2d');
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
+      context.font = "20px Helvetica";
 
-      let blackPearlArea = 0;
+      let blackPearl = null;
 
       const circles = []
 
@@ -38,7 +40,7 @@
         circles.push(newCircle);
 
         if(circle.color == 'black') {
-          blackPearlArea = Math.sqrt(Math.pow(circle.x , 2) + Math.pow(circle.y , 2))
+          blackPearl = circle;
         }
       });
 
@@ -50,11 +52,15 @@
         })
       }
 
-      const isDraggableCircleCliked = (mousex, mousey) => {
+      Draw();
+      aboutColorText = new Text("---", centerX, 200);
+      aboutColorText.drawIn(context);
+
+      const isDraggableCircleClicked = (mousex, mousey) => {
         circles.forEach(function(circle) {
           if(Math.sqrt(Math.pow((mousex - circle.x) , 2) + Math.pow((mousey - circle.y) , 2)) < circle.radius && circle.draggable){
-            console.log(circle.color);
-            return circleDragged = circle;
+            circleDragged = circle;
+            return
           }
         })
         console.log()
@@ -62,19 +68,22 @@
 
       const isCloseToBlackPearl = () => {
         if(circleDragged) {
-          const circleDraggedArea = Math.sqrt(Math.pow(circleDragged.x , 2) + Math.pow(circleDragged.y , 2))
-          if (Math.abs((blackPearlArea - circleDraggedArea) + circles[3].radius) < Math.abs(50)) {
-            console.log('warning');
+          const isClose = circleDragged.distanceBetween(blackPearl) < (blackPearl.radius + circleDragged.radius + 10)
+          if (isClose) {
+            aboutColorText.body = circleDragged.color;
+            aboutColorText.drawIn(context);
+          }
+          else {
+            aboutColorText.body = "";
+            aboutColorText.drawIn(context);
           }
         }
       }
 
-      Draw();
-
       canvas.addEventListener('mousedown', () => {
         var mouseDownX = event.clientX - boundings.left;
         var mouseDownY = event.clientY - boundings.top;
-        isDraggableCircleCliked(mouseDownX, mouseDownY)
+        isDraggableCircleClicked(mouseDownX, mouseDownY)
       })
 
       canvas.addEventListener('mousemove', () => {
