@@ -1,28 +1,16 @@
-// function Circle(radius, color) {
-//   // Base
-//   var ball = this;
-
-//   // Specifications
-//   ball.r = radius || 10;         // ball radius
-//   ball.c = color || 'red';       // ball color
-//   ball.x = 0;                    // center x
-//   ball.y = 0;                    // center y
-//   ball.m = 0;                    // mass
-//   ball.context = null            // the drawing context of ball
-// }
-
 class Circle{
-  constructor(color, x, y, radius) {
-    this.radius = radius;
-    this.x = x;
-    this.y = y;
-    this.color = color;
+  constructor(circle) {
+    this.radius = circle.radius;
+    this.x = circle.x;
+    this.y = circle.y;
+    this.color = circle.color;
+    this.draggable = circle.draggable;
   }
 
   draw() {
     context.beginPath();
-    context.arc(circle.initx, circle.inity, circle.radius, 0, 2 * Math.PI, true);
-    context.fillStyle = circle.color;
+    context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
+    context.fillStyle = this.color;
     context.fill();
     context.lineWidth = 5;
     context.strokeStyle = '#000000';

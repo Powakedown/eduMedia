@@ -18,35 +18,79 @@
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
 
+      let blackPearlArea = 0;
+
       const circles = []
 
+      let circleDragged = null;
+
       const circlesToDraw = [
-        { color: 'red', x: 200, y: 150, radius: 50 },
-        { color: 'yellow', x: 800, y: 300, radius: 50 },
-        { color: 'blue', x: 300, y: 600, radius: 50 },
-        { color: 'black', x: centerX, y: centerY, radius: 20 }
+        { color: 'red', x: 200, y: 150, radius: 50, draggable: true },
+        { color: 'yellow', x: 800, y: 300, radius: 50, draggable: true },
+        { color: 'blue', x: 300, y: 600, radius: 50, draggable: true },
+        { color: 'black', x: centerX, y: centerY, radius: 20, draggable: false }
       ]
 
-      circlesToDraw.forEach(circle = () => {
-        console.log("blah");
-        // let newCircle = new Circle(circle.color, circle.x, circle.y, circle.radius);
-        // newCircle.context = context;
-        // newCircle.draw();
-        // circles.push(circle);
+      circlesToDraw.forEach(function(circle) {
+        let newCircle = new Circle(circle);
+        newCircle.context = context;
+
+        circles.push(newCircle);
+
+        if(circle.color == 'black') {
+          blackPearlArea = Math.sqrt(Math.pow(circle.x , 2) + Math.pow(circle.y , 2))
+        }
       });
 
-      canvas.addEventListener('mousedown', (e) => {
+      const Draw = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        circles.forEach(function(circle) {
+          circle.draw();
+        })
+      }
+
+      const isDraggableCircleCliked = (mousex, mousey) => {
+        circles.forEach(function(circle) {
+          if(Math.sqrt(Math.pow((mousex - circle.x) , 2) + Math.pow((mousey - circle.y) , 2)) < circle.radius && circle.draggable){
+            console.log(circle.color);
+            return circleDragged = circle;
+          }
+        })
+        console.log()
+      }
+
+      const isCloseToBlackPearl = () => {
+        if(circleDragged) {
+          const circleDraggedArea = Math.sqrt(Math.pow(circleDragged.x , 2) + Math.pow(circleDragged.y , 2))
+          if (Math.abs((blackPearlArea - circleDraggedArea) + circles[3].radius) < Math.abs(50)) {
+            console.log('warning');
+          }
+        }
+      }
+
+      Draw();
+
+      canvas.addEventListener('mousedown', () => {
         var mouseDownX = event.clientX - boundings.left;
         var mouseDownY = event.clientY - boundings.top;
+        isDraggableCircleCliked(mouseDownX, mouseDownY)
       })
 
-      canvas.addEventListener('mousemove', (e) => {
+      canvas.addEventListener('mousemove', () => {
         var mouseMoveX = event.clientX - boundings.left;
         var mouseMoveY = event.clientY - boundings.top;
+        if(circleDragged){
+          circleDragged.x = mouseMoveX;
+          circleDragged.y = mouseMoveY;
+
+          Draw();
+        }
+        isCloseToBlackPearl();
       })
 
       canvas.addEventListener('mouseup', (e) => {
-        console.log('mouse' + e);
+        circleDragged = null;
       })
 
 
