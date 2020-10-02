@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script src="circle.js"></script>
+  </head>
+  <body>
+    <canvas id="canvas" width="1024" height="768">
+    </canvas>
+
+    <script>
+      const canvas = document.getElementById('canvas');
+      const boundings = canvas.getBoundingClientRect();
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+
+      const context = canvas.getContext('2d');
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      const circles = []
+
+      const circlesToDraw = [
+        { color: 'red', x: 200, y: 150, radius: 50 },
+        { color: 'yellow', x: 800, y: 300, radius: 50 },
+        { color: 'blue', x: 300, y: 600, radius: 50 },
+        { color: 'black', x: centerX, y: centerY, radius: 20 }
+      ]
+
+      circlesToDraw.forEach(circle = () => {
+        console.log("blah");
+        // let newCircle = new Circle(circle.color, circle.x, circle.y, circle.radius);
+        // newCircle.context = context;
+        // newCircle.draw();
+        // circles.push(circle);
+      });
+
+      canvas.addEventListener('mousedown', (e) => {
+        var mouseDownX = event.clientX - boundings.left;
+        var mouseDownY = event.clientY - boundings.top;
+      })
+
+      canvas.addEventListener('mousemove', (e) => {
+        var mouseMoveX = event.clientX - boundings.left;
+        var mouseMoveY = event.clientY - boundings.top;
+      })
+
+      canvas.addEventListener('mouseup', (e) => {
+        console.log('mouse' + e);
+      })
+
+
+    </script>
+  </body>
+</html>
